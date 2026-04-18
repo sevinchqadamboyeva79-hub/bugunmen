@@ -34,33 +34,57 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-      <div className="bg-slate-800 p-8 rounded-2xl w-full max-w-sm">
-        <h1 className="text-white text-2xl font-bold mb-6 text-center">Bugun Men 🎯</h1>
-        <input
-          className="w-full p-3 bg-slate-700 text-white rounded-lg mb-3"
-          placeholder="Email" value={email}
-          onChange={e => setEmail(e.target.value)} />
-        <input
-          type="password"
-          className="w-full p-3 bg-slate-700 text-white rounded-lg mb-4"
-          placeholder="Parol" value={password}
-          onChange={e => setPassword(e.target.value)} />
-        {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
-        <button
-          onClick={handleSubmit}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-lg font-bold mb-3">
-          {isLogin ? 'Kirish' : "Royxatdan otish"}
-        </button>
-        <button
-          onClick={handleGoogle}
-          className="w-full bg-white text-gray-800 p-3 rounded-lg font-bold mb-4">
-          Google bilan kirish
-        </button>
-        <p className="text-center text-gray-400 text-sm cursor-pointer"
-           onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? "Akkaunt yoqmi? Royxatdan oting" : 'Kirish sahifasiga qaytish'}
-        </p>
+    <div className="min-h-screen bg-[#0A0A0F] flex items-center justify-center p-5">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative w-full max-w-sm">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black text-violet-400 mb-2">Bugun Men 🎯</h1>
+          <p className="text-slate-400">Kasbingizni kashf eting</p>
+        </div>
+
+        <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6">
+          <input
+            className="w-full bg-slate-800 border border-slate-700 text-white
+                       rounded-2xl px-4 py-3.5 mb-3 outline-none
+                       focus:border-violet-500 transition-colors placeholder-slate-500"
+            placeholder="Email" value={email}
+            onChange={e => setEmail(e.target.value)} />
+          <input
+            type="password"
+            className="w-full bg-slate-800 border border-slate-700 text-white
+                       rounded-2xl px-4 py-3.5 mb-4 outline-none
+                       focus:border-violet-500 transition-colors placeholder-slate-500"
+            placeholder="Parol" value={password}
+            onChange={e => setPassword(e.target.value)} />
+
+          {error && (
+            <div className="bg-red-900/30 border border-red-500/30 rounded-xl p-3 mb-4">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+
+          <button onClick={handleSubmit}
+            className="w-full bg-violet-600 hover:bg-violet-500 text-white
+                       font-bold py-4 rounded-2xl mb-3 transition-all
+                       shadow-lg shadow-violet-600/30 active:scale-95">
+            {isLogin ? 'Kirish' : "Ro'yxatdan o'tish"}
+          </button>
+
+          <button onClick={handleGoogle}
+            className="w-full bg-white hover:bg-gray-100 text-gray-800
+                       font-bold py-4 rounded-2xl mb-4 transition-all active:scale-95
+                       flex items-center justify-center gap-2">
+            <span>G</span> Google bilan kirish
+          </button>
+
+          <p className="text-center text-slate-500 text-sm cursor-pointer hover:text-slate-300 transition-colors"
+             onClick={() => setIsLogin(!isLogin)}>
+            {isLogin ? "Akkaunt yo'qmi? Ro'yxatdan o'ting" : 'Kirish sahifasiga qaytish'}
+          </p>
+        </div>
       </div>
     </div>
   )
