@@ -6,6 +6,7 @@ export default function Game() {
   const { professionId } = useParams()
   const navigate = useNavigate()
   const profession = professions.find(p => p.id === professionId)
+  
   const [currentQ, setCurrentQ] = useState(0)
   const [score, setScore] = useState(0)
   const [timeLeft, setTimeLeft] = useState(30)
@@ -13,6 +14,14 @@ export default function Game() {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
+    // Brauzerni yopish yoki yangilashdan himoya (UX)
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = ''; // Ko'p brauzerlarda standart ogohlantirishni chiqaradi
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Timer mantiqi
     if (selected !== null) return
     const timer = setInterval(() => {
       setTimeLeft(t => {
@@ -20,38 +29,53 @@ export default function Game() {
         return t - 1
       })
     }, 1000)
-    return () => clearInterval(timer)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      clearInterval(timer);
+    }
   }, [currentQ, selected])
 
-  function handleAnswer(option) {
-  if (selected) return
-  setSelected(option)
-  setTimeout(() => {
-    try {
-      const bonus = timeLeft > 20 ? 15 : timeLeft > 10 ? 10 : 5
-      const points = option ? option.score + bonus : 0
-      const newScore = score + points
-      const newTraits = { ...traits }
-      if (option?.traits) {
-        Object.entries(option.traits).forEach(([k, v]) => {
-          newTraits[k] = (newTraits[k] || 0) + v
-        })
-      }
-      if (currentQ + 1 >= profession.questions.length) {
-        navigate('/result', { state: { score: newScore, traits: newTraits, profession } })
-      } else {
-        setCurrentQ(q => q + 1)
-        setScore(newScore)
-        setTraits(newTraits)
-        setTimeLeft(30)
-        setSelected(null)
-      }
-    } catch (err) {
-      console.error('Game xatosi:', err)
-      navigate('/')
+  // O'yindan chiqish tugmasi uchun pop-up (UX)
+  function handleExit() {
+    const confirmExit = window.confirm("O'yinni to'xtatmoqchimisiz? Hozirgi natijalaringiz saqlanmaydi!");
+    if (confirmExit) {
+      navigate('/');
     }
-  }, 600)
-}
+  }
+
+  function handleAnswer(option) {
+    if (selected) return
+    setSelected(option)
+    
+    setTimeout(() => {
+      try {
+        const bonus = timeLeft > 20 ? 15 : timeLeft > 10 ? 10 : 5
+        const points = option ? option.score + bonus : 0
+        const newScore = score + points
+        const newTraits = { ...traits }
+        
+        if (option?.traits) {
+          Object.entries(option.traits).forEach(([k, v]) => {
+            newTraits[k] = (newTraits[k] || 0) + v
+          })
+        }
+
+        if (currentQ + 1 >= profession.questions.length) {
+          navigate('/result', { state: { score: newScore, traits: newTraits, profession } })
+        } else {
+          setCurrentQ(q => q + 1)
+          setScore(newScore)
+          setTraits(newTraits)
+          setTimeLeft(30)
+          setSelected(null)
+        }
+      } catch (err) {
+        console.error('Game xatosi:', err)
+        navigate('/')
+      }
+    }, 600)
+  }
 
   const question = profession.questions[currentQ]
   const timerPct = (timeLeft / 30) * 100
@@ -66,7 +90,8 @@ export default function Game() {
       <div className="relative max-w-lg mx-auto">
         {/* Header */}
         <div className="flex items-center gap-3 pt-4 mb-6">
-          <button onClick={() => navigate('/')}
+          {/* handleExit funksiyasi ulandi */}
+          <button onClick={handleExit} 
             className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white transition-colors">
             ‹
           </button>
@@ -78,7 +103,7 @@ export default function Game() {
           </div>
         </div>
 
-        {/* Progress */}
+        {/* Progress bar */}
         <div className="flex gap-1.5 mb-6">
           {profession.questions.map((_, i) => (
             <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-500
@@ -92,7 +117,7 @@ export default function Game() {
                style={{ width: `${timerPct}%` }} />
         </div>
 
-        {/* Savol */}
+        {/* Savol kartasi */}
         <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 mb-6">
           <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-3">
             Savol {currentQ + 1} / {profession.questions.length}

@@ -82,7 +82,7 @@ export default function Result() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] p-5 pb-10">
+    <div className="min-h-screen bg-[#0A0A0F] p-5 pb-24"> {/* pb-24 pastki navga joy ochadi */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
       </div>
@@ -110,7 +110,7 @@ export default function Result() {
         </div>
 
         {/* % natija */}
-        <div className={`${level.bg} border ${level.border} rounded-3xl p-6 mb-4 text-center`}>
+        <div className={`${level.bg} border ${level.border} rounded-3xl p-6 mb-8 text-center`}>
           <p className={`text-7xl font-black ${level.color}`}>{percent}%</p>
           <p className="text-slate-400 mt-1 text-sm">moslik darajasi</p>
           <div className="w-full bg-slate-800 rounded-full h-2 mt-4">
@@ -122,7 +122,7 @@ export default function Result() {
 
         {/* Kuchli tomonlar */}
         {sortedTraits.length > 0 && (
-          <div className="mb-4">
+          <div className="mb-8">
             <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
               Sizning kuchli tomonlaringiz
             </p>
@@ -165,35 +165,38 @@ export default function Result() {
           </div>
         )}
 
-        {/* Tugmalar */}
-        <button onClick={shareResult}
-          className="w-full bg-violet-600 hover:bg-violet-500 text-white
-                     font-bold py-4 rounded-2xl mb-3 transition-all
-                     shadow-lg shadow-violet-600/30 active:scale-95">
-          📤 Natijamni ulashish
-        </button>
-        <button onClick={() => navigate('/')}
-          className="w-full bg-slate-900/80 border border-slate-800
-                     text-slate-300 font-bold py-4 rounded-2xl
-                     hover:bg-slate-800 transition-all active:scale-95">
-          🔄 Boshqa kasbni sinash
-        </button>
+        {/* Tugmalar konteyneri */}
+        <div className="space-y-3 mb-10"> {/* mb-10 navigatsiyadan oldin masofa beradi */}
+          <button onClick={shareResult}
+            className="w-full bg-violet-600 hover:bg-violet-500 text-white
+                       font-bold py-4 rounded-2xl transition-all
+                       shadow-lg shadow-violet-600/30 active:scale-95">
+            📤 Natijamni ulashish
+          </button>
+          <button onClick={() => navigate('/')}
+            className="w-full bg-slate-900/80 border border-slate-800
+                       text-slate-300 font-bold py-4 rounded-2xl
+                       hover:bg-slate-800 transition-all active:scale-95">
+            🔄 Boshqa kasbni sinash
+          </button>
+        </div>
       </div>
+
       {/* Pastki navigatsiya */}
-<div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-sm">
-  <div className="max-w-lg mx-auto flex">
-    <button onClick={() => navigate('/')}
-      className="flex-1 py-4 flex flex-col items-center gap-1">
-      <span className="text-xl">🏠</span>
-      <span className="text-xs text-violet-400 font-semibold">Bosh sahifa</span>
-    </button>
-    <button onClick={() => navigate('/profile')}
-      className="flex-1 py-4 flex flex-col items-center gap-1">
-      <span className="text-xl">👤</span>
-      <span className="text-xs text-slate-400">Profil</span>
-    </button>
-  </div>
-</div>
+      <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-sm z-50">
+        <div className="max-w-lg mx-auto flex">
+          <button onClick={() => navigate('/')}
+            className="flex-1 py-4 flex flex-col items-center gap-1">
+            <span className="text-xl">🏠</span>
+            <span className="text-xs text-violet-400 font-semibold">Bosh sahifa</span>
+          </button>
+          <button onClick={() => navigate('/profile')}
+            className="flex-1 py-4 flex flex-col items-center gap-1">
+            <span className="text-xl">👤</span>
+            <span className="text-xs text-slate-400">Profil</span>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
