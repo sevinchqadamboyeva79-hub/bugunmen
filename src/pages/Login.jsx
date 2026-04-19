@@ -10,15 +10,33 @@ export default function Login() {
   const [username, setUsername] = useState('')
   const [isLogin, setIsLogin] = useState(true)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  function getErrorMessage(code) {
+    switch (code) {
+      case 'auth/user-not-found':      return "Bu email ro'yxatdan o'tmagan!"
+      case 'auth/wrong-password':      return "Parol noto'g'ri! Qaytadan urinib ko'ring."
+      case 'auth/invalid-credential':  return "Email yoki parol noto'g'ri!"
+      case 'auth/email-already-in-use':return "Bu email band. Kirish sahifasiga o'ting."
+      case 'auth/invalid-email':       return "Email noto'g'ri formatda."
+      case 'auth/weak-password':       return "Parol kamida 6 ta belgi bo'lishi kerak."
+      case 'auth/network-request-failed': return "Internet yo'q. Tarmoqni tekshiring!"
+      case 'auth/too-many-requests':   return "Juda ko'p urinish. Biroz kuting."
+      default:                         return "Xato yuz berdi. Qaytadan urinib ko'ring."
+    }
+  }
 
   async function handleSubmit() {
     setError('')
+    setLoading(true)
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password)
       } else {
-        if (!username.trim()) { setError('Ismingizni kiriting!'); return }
+        if (!username.trim()) { setError('Ismingizni kiriting!'); setLoading(false); return }
+        if (!email.trim()) { setError('Email kiriting!'); setLoading(false); return }
+        if (password.length < 6) { setError("Parol kamida 6 ta belgi bo'lishi kerak."); setLoading(false); return }
         const cred = await createUserWithEmailAndPassword(auth, email, password)
         await setDoc(doc(db, 'users', cred.user.uid), {
           username: username.trim(),
@@ -30,11 +48,15 @@ export default function Login() {
       }
       navigate('/')
     } catch (e) {
-      setError('Xato: ' + e.message)
+      setError(getErrorMessage(e.code))
+    } finally {
+      setLoading(false)
     }
   }
 
   async function handleGoogle() {
+    setError('')
+    setLoading(true)
     try {
       const cred = await signInWithPopup(auth, new GoogleAuthProvider())
       const ref = doc(db, 'users', cred.user.uid)
@@ -50,7 +72,9 @@ export default function Login() {
       }
       navigate('/')
     } catch (e) {
-      setError('Google xatosi: ' + e.message)
+      setError(getErrorMessage(e.code))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -91,28 +115,42 @@ export default function Login() {
             onChange={e => setPassword(e.target.value)} />
 
           {error && (
-            <div className="bg-red-900/30 border border-red-500/30 rounded-xl p-3 mb-4">
+            <div className="bg-red-900/30 border border-red-500/30 rounded-xl p-3 mb-4
+                            flex items-start gap-2">
+              <span className="text-red-400 mt-0.5">⚠️</span>
               <p className="text-red-400 text-sm">{error}</p>
             </div>
           )}
 
-          <button onClick={handleSubmit}
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
             className="w-full bg-violet-600 hover:bg-violet-500 text-white
                        font-bold py-4 rounded-2xl mb-3 transition-all
-                       shadow-lg shadow-violet-600/30 active:scale-95">
-            {isLogin ? 'Kirish' : "Ro'yxatdan o'tish"}
+                       shadow-lg shadow-violet-600/30 active:scale-95
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       flex items-center justify-center gap-2">
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              isLogin ? 'Kirish' : "Ro'yxatdan o'tish"
+            )}
           </button>
 
-          <button onClick={handleGoogle}
+          <button
+            onClick={handleGoogle}
+            disabled={loading}
             className="w-full bg-white hover:bg-gray-100 text-gray-800
                        font-bold py-4 rounded-2xl mb-4 transition-all
-                       active:scale-95 flex items-center justify-center gap-2">
-            <span className="font-black">G</span> Google bilan kirish
+                       active:scale-95 disabled:opacity-50
+                       flex items-center justify-center gap-2">
+            <span className="font-black text-lg">G</span>
+            Google bilan kirish
           </button>
 
           <p className="text-center text-slate-500 text-sm cursor-pointer
                         hover:text-slate-300 transition-colors"
-             onClick={() => setIsLogin(!isLogin)}>
+             onClick={() => { setIsLogin(!isLogin); setError('') }}>
             {isLogin ? "Akkaunt yo'qmi? Ro'yxatdan o'ting" : 'Kirish sahifasiga qaytish'}
           </p>
         </div>

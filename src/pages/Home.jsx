@@ -8,6 +8,17 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'
 export default function Home() {
   const navigate = useNavigate()
   const [user] = useAuthState(auth)
+  const [username, setUsername] = useState('')
+useEffect(() => {
+  if (!user) return
+  async function loadUser() {
+    const ref = doc(db, 'users', user.uid)
+    const snap = await getDoc(ref)
+    const data = snap.data() || {}
+    setUsername(data.username || user.email?.split('@')[0])
+  }
+  loadUser()
+}, [user])
   const [streak, setStreak] = useState(0)
   const [todayDone, setTodayDone] = useState(false)
 
@@ -46,7 +57,7 @@ export default function Home() {
         <div className="inline-block bg-violet-500/10 border border-violet-500/20
                 rounded-full px-4 py-1.5 text-violet-400 text-xs
                 font-semibold mb-4">
-          👋 Salom, {user?.displayName || user?.email?.split('@')[0]}!
+          👋 Salom, {username}!
         </div>
         <h1 className="text-5xl font-black text-violet-400 mb-3 leading-tight">
           Bugun Men… 🎯
@@ -141,6 +152,22 @@ export default function Home() {
           </button>
         ))}
       </div>
+      {/* Pastki navigatsiya */}
+<div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-sm">
+  <div className="max-w-lg mx-auto flex">
+    <button onClick={() => navigate('/')}
+      className="flex-1 py-4 flex flex-col items-center gap-1">
+      <span className="text-xl">🏠</span>
+      <span className="text-xs text-violet-400 font-semibold">Bosh sahifa</span>
+    </button>
+    <button onClick={() => navigate('/profile')}
+      className="flex-1 py-4 flex flex-col items-center gap-1">
+      <span className="text-xl">👤</span>
+      <span className="text-xs text-slate-400">Profil</span>
+    </button>
+  </div>
+</div>
+
     </div>
   )
 }

@@ -179,6 +179,21 @@ export default function Result() {
           🔄 Boshqa kasbni sinash
         </button>
       </div>
+      {/* Pastki navigatsiya */}
+<div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-sm">
+  <div className="max-w-lg mx-auto flex">
+    <button onClick={() => navigate('/')}
+      className="flex-1 py-4 flex flex-col items-center gap-1">
+      <span className="text-xl">🏠</span>
+      <span className="text-xs text-violet-400 font-semibold">Bosh sahifa</span>
+    </button>
+    <button onClick={() => navigate('/profile')}
+      className="flex-1 py-4 flex flex-col items-center gap-1">
+      <span className="text-xl">👤</span>
+      <span className="text-xs text-slate-400">Profil</span>
+    </button>
+  </div>
+</div>
     </div>
   )
 }
