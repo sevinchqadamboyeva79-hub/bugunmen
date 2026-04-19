@@ -168,28 +168,29 @@ export default function Result() {
         )}
 
         {/* YO'L XARITASI (ROADMAP) BLOKI */}
-        <div className="bg-gradient-to-br from-violet-600/20 to-pink-600/20 border border-violet-500/30 rounded-3xl p-6 mb-10">
-          <h3 className="text-white font-bold text-lg mb-2 flex items-center gap-2">
-            🗺️ Kelajak yo'l xaritasi
-          </h3>
-          <p className="text-slate-300 text-sm mb-4 leading-relaxed">
-            Sizda {profession.name} bo'lish uchun kuchli salohiyat bor! Mana birinchi qadamlar:
-          </p>
-          <ul className="space-y-3">
-            <li className="flex gap-3 text-sm text-slate-300">
-              <span className="text-violet-400 font-bold">01.</span>
-              Sohaga oid Soft skillaringizni rivojlantirishda davom eting.
-            </li>
-            <li className="flex gap-3 text-sm text-slate-300">
-              <span className="text-violet-400 font-bold">02.</span>
-              Tez orada sizga mos bepul kurslar ro'yxatini taqdim etamiz.
-            </li>
-            <li className="flex gap-3 text-sm text-slate-300">
-              <span className="text-violet-400 font-bold">03.</span>
-              Ertaga yana bir bor o'zingizni sinang va streakni buzmang! 🔥
-            </li>
-          </ul>
-        </div>
+<div className="bg-gradient-to-br from-violet-600/20 to-pink-600/20 border border-violet-500/30 rounded-3xl p-6 mb-10">
+  <h3 className="text-white font-bold text-lg mb-2 flex items-center gap-2">
+    🗺️ Kelajak yo'l xaritasi
+  </h3>
+  <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+    Sizning salohiyatingiz yuqori! Kasbiy o'sish uchun keyingi qadamlar:
+  </p>
+  <ul className="space-y-3">
+    <li className="flex gap-3 text-sm text-slate-300">
+      <span className="text-violet-400 font-bold">01.</span>
+      Shaxsiy "Kasb Pasporti"ni shakllantiring.
+    </li>
+    <li className="flex gap-3 text-sm text-slate-300">
+      <span className="text-violet-400 font-bold">02.</span>
+      Kasbingiz bo'yicha stajirovka dasturlariga ariza topshiring.
+    </li>
+    <li className="flex gap-3 text-sm text-slate-300 items-center">
+      <span className="text-violet-400 font-bold">03.</span>
+      <span className="bg-violet-900/50 text-violet-400 text-[10px] px-2 py-0.5 rounded-full border border-violet-700/50">PREMIUM</span>
+      Top kompaniyalarda kafolatlangan stajirovka imkonini oling.
+    </li>
+  </ul>
+</div>
 
         {/* Asosiy tugmalar */}
         <div className="space-y-3 mb-12">
