@@ -24,8 +24,10 @@ export default function Game() {
   }, [currentQ, selected])
 
   function handleAnswer(option) {
-    setSelected(option)
-    setTimeout(() => {
+  if (selected) return
+  setSelected(option)
+  setTimeout(() => {
+    try {
       const bonus = timeLeft > 20 ? 15 : timeLeft > 10 ? 10 : 5
       const points = option ? option.score + bonus : 0
       const newScore = score + points
@@ -44,8 +46,12 @@ export default function Game() {
         setTimeLeft(30)
         setSelected(null)
       }
-    }, 600)
-  }
+    } catch (err) {
+      console.error('Game xatosi:', err)
+      navigate('/')
+    }
+  }, 600)
+}
 
   const question = profession.questions[currentQ]
   const timerPct = (timeLeft / 30) * 100
