@@ -71,18 +71,21 @@ export default function Result() {
 
   function shareResult() {
     const topTrait = sortedTraits[0]
-    const traitName = topTrait ? traitDetails[topTrait[0]]?.name : ''
-    const text = `Men bugun "${profession.name}" kasbini sinab ko'rdim!\n\nMosligim: ${percent}%\nKuchli tomonim: ${traitName}\n\nSiz ham sinab ko'ring 👇\nhttps://bugunmen.vercel.app`
+    const traitInfo = topTrait ? traitDetails[topTrait[0]] : null
+    
+    // STARTUPER VIZUAL SHARING TEXT
+    const text = `🌟 BUGUN MEN: ${profession.name.toUpperCase()}! 🎯\n\n📊 Moslik darajasi: ${percent}%\n🧠 Kuchli tomonim: ${traitInfo?.name || ''}\n\nSiz ham qaysi kasbga mosligingizni bilib oling:\n👇👇👇\nhttps://bugunmen.vercel.app`
+    
     if (navigator.share) {
-      navigator.share({ title: 'Bugun Men 🎯', text, url: 'https://bugunmen.vercel.app' })
+      navigator.share({ title: 'Bugun Men 🎯', text })
     } else {
       navigator.clipboard.writeText(text)
-      alert('Nusxalandi! Telegram ga joylashtiring 🎉')
+      alert('✅ Matn nusxalandi!\n\nMaslahat: Sahifani skrinshot qiling va Telegram Story-da ushbu matn bilan birga ulashing. Bu juda chiroyli ko\'rinadi! ✨')
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] p-5 pb-24"> {/* pb-24 pastki navga joy ochadi */}
+    <div className="min-h-screen bg-[#0A0A0F] p-5 pb-32"> {/* pb-32 pastki nav uchun joy */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl" />
       </div>
@@ -97,7 +100,7 @@ export default function Result() {
           </p>
         </div>
 
-        {/* Kasb */}
+        {/* Kasb sarlavhasi */}
         <div className="text-center mb-6">
           <div className="w-24 h-24 rounded-3xl mx-auto mb-4
                           bg-gradient-to-br from-violet-900/50 to-pink-900/30
@@ -109,7 +112,7 @@ export default function Result() {
           <p className={`text-lg font-semibold mt-1 ${level.color}`}>{level.text}</p>
         </div>
 
-        {/* % natija */}
+        {/* Natija foizi */}
         <div className={`${level.bg} border ${level.border} rounded-3xl p-6 mb-8 text-center`}>
           <p className={`text-7xl font-black ${level.color}`}>{percent}%</p>
           <p className="text-slate-400 mt-1 text-sm">moslik darajasi</p>
@@ -120,7 +123,7 @@ export default function Result() {
           </div>
         </div>
 
-        {/* Kuchli tomonlar */}
+        {/* Kuchli tomonlar bo'limi */}
         {sortedTraits.length > 0 && (
           <div className="mb-8">
             <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-3">
@@ -151,13 +154,6 @@ export default function Result() {
                       </div>
                     </div>
                     <p className="text-slate-400 text-xs leading-relaxed">{info.desc}</p>
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      {info.careers.map(c => (
-                        <span key={c} className="bg-slate-800 text-slate-400 text-xs px-2 py-0.5 rounded-lg">
-                          {c}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 )
               })}
@@ -165,8 +161,32 @@ export default function Result() {
           </div>
         )}
 
-        {/* Tugmalar konteyneri */}
-        <div className="space-y-3 mb-10"> {/* mb-10 navigatsiyadan oldin masofa beradi */}
+        {/* YO'L XARITASI (ROADMAP) BLOKI */}
+        <div className="bg-gradient-to-br from-violet-600/20 to-pink-600/20 border border-violet-500/30 rounded-3xl p-6 mb-10">
+          <h3 className="text-white font-bold text-lg mb-2 flex items-center gap-2">
+            🗺️ Kelajak yo'l xaritasi
+          </h3>
+          <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+            Sizda {profession.name} bo'lish uchun kuchli salohiyat bor! Mana birinchi qadamlar:
+          </p>
+          <ul className="space-y-3">
+            <li className="flex gap-3 text-sm text-slate-300">
+              <span className="text-violet-400 font-bold">01.</span>
+              Sohaga oid Soft skillaringizni rivojlantirishda davom eting.
+            </li>
+            <li className="flex gap-3 text-sm text-slate-300">
+              <span className="text-violet-400 font-bold">02.</span>
+              Tez orada sizga mos bepul kurslar ro'yxatini taqdim etamiz.
+            </li>
+            <li className="flex gap-3 text-sm text-slate-300">
+              <span className="text-violet-400 font-bold">03.</span>
+              Ertaga yana bir bor o'zingizni sinang va streakni buzmang! 🔥
+            </li>
+          </ul>
+        </div>
+
+        {/* Asosiy tugmalar */}
+        <div className="space-y-3 mb-12">
           <button onClick={shareResult}
             className="w-full bg-violet-600 hover:bg-violet-500 text-white
                        font-bold py-4 rounded-2xl transition-all
@@ -182,7 +202,7 @@ export default function Result() {
         </div>
       </div>
 
-      {/* Pastki navigatsiya */}
+      {/* Pastki navigatsiya paneli */}
       <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-sm z-50">
         <div className="max-w-lg mx-auto flex">
           <button onClick={() => navigate('/')}
