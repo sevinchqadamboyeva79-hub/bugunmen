@@ -46,7 +46,7 @@ export default function Home() {
         <div className="inline-block bg-violet-500/10 border border-violet-500/20
                 rounded-full px-4 py-1.5 text-violet-400 text-xs
                 font-semibold mb-4">
-          👋 Salom, {user?.email?.split('@')[0]}!
+          👋 Salom, {user?.displayName || user?.email?.split('@')[0]}!
         </div>
         <h1 className="text-5xl font-black text-violet-400 mb-3 leading-tight">
           Bugun Men… 🎯

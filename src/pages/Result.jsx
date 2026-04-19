@@ -1,4 +1,8 @@
+import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { auth, db } from '../firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 const traitDetails = {
   analytic: {
@@ -30,7 +34,25 @@ const traitDetails = {
 export default function Result() {
   const { state } = useLocation()
   const navigate = useNavigate()
+  const [user] = useAuthState(auth)
   const { score, traits, profession } = state || {}
+
+  useEffect(() => {
+    if (!user || !profession) return
+    async function updateStreak() {
+      const ref = doc(db, 'users', user.uid)
+      const snap = await getDoc(ref)
+      const data = snap.data() || {}
+      const today = new Date().toDateString()
+      const yesterday = new Date(Date.now() - 86400000).toDateString()
+      if (data.lastPlayedDate === today) return
+      let streak = data.streak || 0
+      if (data.lastPlayedDate === yesterday) streak += 1
+      else streak = 1
+      await setDoc(ref, { ...data, streak, lastPlayedDate: today }, { merge: true })
+    }
+    updateStreak()
+  }, [user, profession])
 
   if (!profession) { navigate('/'); return null }
 
@@ -66,6 +88,14 @@ export default function Result() {
       </div>
 
       <div className="relative max-w-lg mx-auto pt-8">
+
+        {/* Streak bildirish */}
+        <div className="bg-orange-900/20 border border-orange-700/30 rounded-2xl p-3 mb-6 flex items-center gap-3">
+          <span className="text-2xl">🔥</span>
+          <p className="text-orange-400 text-sm font-semibold">
+            Barakalla! Bugungi streak saqlandi!
+          </p>
+        </div>
 
         {/* Kasb */}
         <div className="text-center mb-6">
