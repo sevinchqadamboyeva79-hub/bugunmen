@@ -70,19 +70,25 @@ export default function Result() {
     .slice(0, 3)
 
   function shareResult() {
-    const topTrait = sortedTraits[0]
-    const traitInfo = topTrait ? traitDetails[topTrait[0]] : null
-    
-    // STARTUPER VIZUAL SHARING TEXT
-    const text = `🌟 BUGUN MEN: ${profession.name.toUpperCase()}! 🎯\n\n📊 Moslik darajasi: ${percent}%\n🧠 Kuchli tomonim: ${traitInfo?.name || ''}\n\nSiz ham qaysi kasbga mosligingizni bilib oling:\n👇👇👇\nhttps://bugunmen.vercel.app`
-    
-    if (navigator.share) {
-      navigator.share({ title: 'Bugun Men 🎯', text })
-    } else {
-      navigator.clipboard.writeText(text)
-      alert('✅ Matn nusxalandi!\n\nMaslahat: Sahifani skrinshot qiling va Telegram Story-da ushbu matn bilan birga ulashing. Bu juda chiroyli ko\'rinadi! ✨')
-    }
-  }
+  const topTrait = sortedTraits[0];
+  const traitInfo = topTrait ? traitDetails[topTrait[0]] : null;
+  
+  // 1. Ulashish uchun matnni tayyorlaymiz
+  const shareText = `🌟 BUGUN MEN: ${profession.name.toUpperCase()}! 🎯%0A%0A📊 Moslik darajasi: ${percent}%25%0A🧠 Kuchli tomonim: ${traitInfo?.name || ''}%0A%0ASiz ham qaysi kasbga mosligingizni bilib oling:%0A👇👇👇%0Ahttps://bugunmen.vercel.app`;
+
+  // 2. Telegram uchun maxsus havola (Bu matnni Telegramga olib o'tishni kafolatlaydi)
+  const telegramUrl = `https://t.me/share/url?url=https://bugunmen.vercel.app&text=${shareText}`;
+
+  // 3. Variantlar: Agar mobil qurilmada "Share" menyusi ochilishi qiyin bo'lsa, 
+  // to'g'ridan-to'g'ri Telegramga yo'naltiramiz
+  window.open(telegramUrl, '_blank');
+  
+  // 4. Foydalanuvchiga nima bo'lganini tushuntirish uchun (UX)
+  // Bu yerda screenshot qilish haqida maslahat ham chiqadi
+  setTimeout(() => {
+    alert("🚀 Telegramga yo'naltirildi!\n\nMaslahat: Natijangiz yanada chiroyli ko'rinishi uchun ushbu sahifani skrinshot qilib Story-ga qo'ying!");
+  }, 500);
+}
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] p-5 pb-32"> {/* pb-32 pastki nav uchun joy */}
